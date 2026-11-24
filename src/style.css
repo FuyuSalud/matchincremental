@@ -8,4 +8,7 @@
 
 .save-transfer-row{display:flex;justify-content:flex-end;max-width:1120px;margin:0 auto;padding:8px 20px 0}.save-transfer{display:flex;gap:8px}.save-transfer button{font:inherit;font-size:11px;color:#d7c7a0;background:#24231f;border:1px solid #514635;padding:7px 10px;cursor:pointer}.save-transfer button:hover{background:#342f25}@media(max-width:700px){.save-transfer-row{padding:8px 14px 0}.save-transfer button{font-size:10px;padding:7px 8px}}
 
+.cigarette-break-entry{flex:none;padding:8px 10px;border:2px solid #75552f;background:#332619;color:#e5c56e;font:inherit;font-size:9px;letter-spacing:.5px;box-shadow:2px 2px #0b0907}.cigarette-break-entry:hover{background:#49351f;color:#ffe28b}
+@media(max-width:700px){.cigarette-break-entry{order:2;margin-left:auto;padding:7px 8px;font-size:8px}.topbar>.reset{order:2}}
+
 .save-transfer-row{display:flex;justify-content:flex-end;max-width:1120px;margin:0 auto;padding:8px 20px 0}.save-transfer{display:flex;gap:8px}.save-transfer button{font:inherit;font-size:11px;color:#d7c7a0;background:#24231f;border:1px solid #514635;padding:7px 10px;cursor:pointer}.save-transfer button:hover{background:#342f25}@media(max-width:700px){.save-transfer-row{padding:8px 14px 0}.save-transfer button{font-size:10px;padding:7px 8px}}

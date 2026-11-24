@@ -2,6 +2,7 @@ import React,{useEffect,useMemo,useRef,useState} from 'react';
 import { Flame, Sparkles, CircleDollarSign, BookOpen, Zap, LockKeyhole, Check, ChevronRight, RotateCcw, MousePointer2, Info, X } from 'lucide-react';
 import {MATCHES,UPGRADES,JOURNAL,fresh,loadGame,saveGame,level,cost,matchStats,canUnlock,canBeginFinale,availableJournal,beginNewEra} from './game.js';
 import {AshPile,PixelIcon,PixelMatch} from './PixelArt.jsx';
+import CigaretteBreak from './CigaretteBreak.jsx';
 function Resource({label,value,color}){return <div className="resource"><span className={`resource-icon ${color}`}><PixelIcon type={color}/></span><div><small>{label}</small><strong>{Math.floor(value).toLocaleString('ja-JP')}</strong></div></div>}
 function SaveTransfer({onImported}){
  const picker=useRef(null);
@@ -21,7 +22,7 @@ function Collection({state,onSelect,onUnlock}){return <div className="collection
  </article>})}</div>}
 function ResearchArchive({state}){const known=JOURNAL.filter(entry=>state.journal.includes(entry.id));return <section className="research-archive"><div className="archive-heading"><small>RESEARCH RECORDS</small><span>{known.length} / {JOURNAL.length}</span></div>{known.length?known.map(entry=><article className="record-entry" key={entry.id}><span className="record-mark"/><div><h3>{entry.title}</h3><p>{entry.text}</p></div></article>):<p className="archive-empty">火を灯すたび、余白に何かが残る。</p>}</section>}
 function App(){
- const [game,setGame]=useState(loadGame),[burn,setBurn]=useState(null),[message,setMessage]=useState('ドラッグして、マッチを擦ろう'),[gesture,setGesture]=useState(null),[sparks,setSparks]=useState(false),[toast,setToast]=useState(''),[notice,setNotice]=useState(null),[now,setNow]=useState(0);
+ const [game,setGame]=useState(loadGame),[burn,setBurn]=useState(null),[message,setMessage]=useState('ドラッグして、マッチを擦ろう'),[gesture,setGesture]=useState(null),[sparks,setSparks]=useState(false),[toast,setToast]=useState(''),[notice,setNotice]=useState(null),[now,setNow]=useState(0),[breakOpen,setBreakOpen]=useState(false);
  const drag=useRef(null),lastAuto=useRef(0),timeout=useRef(),burnPaid=useRef(false),lastJournalToast=useRef('');
  const match=MATCHES.find(m=>m.id===game.selected)||MATCHES[0],stats=useMemo(()=>matchStats(game,match),[game,match]);
  useEffect(()=>{saveGame(game)},[game]);
@@ -47,9 +48,10 @@ function App(){
  function reset(){if(confirm('セーブデータをリセットしますか？')){const n=fresh();setGame(n);setBurn(null);localStorage.removeItem('match-incremental-v02')}}
  const tabs=[['points','ポイント強化',CircleDollarSign],['embers','燃え殻強化',Flame],['ash','灰強化',Sparkles],['book','マッチ図鑑',BookOpen]];
  const elapsed=burn?Math.max(0,1-(Date.now()-burn.started)/burn.duration):0;
+ if(breakOpen)return <CigaretteBreak match={match} onBack={()=>setBreakOpen(false)}/>;
  if(game.ending==='ashes')return <main className="ending-screen"><div className="ending-grain"/><div className="ending-content"><small>ERA {game.era+1} · THE FIRE HAS PASSED</small><AshPile/><h1>火は消えた。</h1><p>熱は去り、ここには灰だけが残る。<br/>終わりの底に、まだ小さな種が眠っている。</p><button className="new-era-button" onClick={startNewEra}>NEW ERA <ChevronRight size={16}/></button><span className="next-era-ash">灰の火種　{Math.max(1,Math.floor(Math.sqrt(game.ash)))}</span></div></main>;
  return <main className="app-shell">
-  <header className="topbar"><a className="brand" href="#"><span className="brand-mark"><Flame size={21}/></span><span><b>MATCH</b> INCREMENTAL<small>VISUAL EVOLUTION <i>v0.2</i></small></span></a><div className="resources"><Resource label="ポイント" value={game.points} color="gold"/><Resource label="燃え殻" value={game.embers} color="ember"/><Resource label="灰" value={game.ash} color="ash"/></div><button className="icon-button reset" aria-label="リセット" onClick={reset}><RotateCcw size={16}/></button></header>
+  <header className="topbar"><a className="brand" href="#"><span className="brand-mark"><Flame size={21}/></span><span><b>MATCH</b> INCREMENTAL<small>VISUAL EVOLUTION <i>v0.2</i></small></span></a><div className="resources"><Resource label="ポイント" value={game.points} color="gold"/><Resource label="燃え殻" value={game.embers} color="ember"/><Resource label="灰" value={game.ash} color="ash"/></div><button className="cigarette-break-entry" onClick={()=>setBreakOpen(true)}>CIGARETTE BREAK</button><button className="icon-button reset" aria-label="リセット" onClick={reset}><RotateCcw size={16}/></button></header>
   <div className="save-transfer-row"><SaveTransfer onImported={setGame}/></div>
   <section className={`hero ${level(game,'factory')>=3?'factory-developed':''}`}><div className="eyebrow"><span className="live-dot"/>{game.ending==='awaiting-last-match'?'THE LAST MATCH':burn?'BURNING IN PROGRESS':'YOUR WORKBENCH'}<span className="eyeline"/></div><h1>{game.ending==='awaiting-last-match'?<>最後の火を、<em>手の中に。</em></>:<>一本の火を、<em>育てる。</em></>}</h1><p className="intro">{game.ending==='awaiting-last-match'?'工場は止まった。静けさの中で、最後の一本を擦る。':game.eraBurns>=20?'工場の音が、机まで届いている。':'擦って、灯して、育てよう。火が消えたあとには、次の成長の種が残る。'}</p>
     <div className={`workbench ${burn?'is-burning':''}`}>
