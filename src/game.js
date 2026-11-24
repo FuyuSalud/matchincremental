@@ -23,9 +23,9 @@ export const UPGRADES = {
   ],
   ash:[
     {id:'collector',name:'灰回収装置',desc:'灰 +1 / 周',currency:'ash',base:5,effect:'+1',max:8},
-    {id:'autoignite',name:'自動着火装置',desc:'手を離していても着火',currency:'ash',base:12,effect:'自動',max:1},
-    {id:'storage',name:'マッチ保管庫',desc:'自動生産の効率を上げる',currency:'ash',base:20,effect:'+25%',max:8},
-    {id:'line',name:'生産ライン',desc:'一定間隔で自動着火',currency:'ash',base:35,effect:'自動',max:1},
+    {id:'autoignite',name:'自動着火装置',desc:'購入すると8秒ごとに自動で着火',currency:'ash',base:12,effect:'8秒間隔',max:1},
+    {id:'storage',name:'マッチ保管庫',desc:'自動着火の間隔を少し短縮',currency:'ash',base:20,effect:'-5%',max:8},
+    {id:'line',name:'生産ライン',desc:'自動着火の間隔を短縮',currency:'ash',base:35,effect:'-15%',max:1},
     {id:'simul',name:'同時燃焼数',desc:'灰の獲得が増加',currency:'ash',base:50,effect:'+1灰',max:5},
     {id:'factory',name:'自動生産設備',desc:'自動着火の間隔を短縮',currency:'ash',base:90,effect:'-15%',max:6},
   ]
