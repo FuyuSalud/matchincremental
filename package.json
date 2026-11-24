@@ -1,0 +1,63 @@
+{
+  "name": "match-incremental",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "main": "electron/main.cjs",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=./",
+    "build:web": "vite build --base=/ --outDir dist-web",
+    "build:itch": "vite build --base=./ --outDir dist-itch",
+    "package:itch": "npm run build:itch && powershell -NoProfile -Command \"if (-not (Test-Path 'release')) { New-Item -ItemType Directory -Path 'release' | Out-Null }; if (Test-Path 'release/MATCH-INCREMENTAL-HTML5.zip') { Remove-Item 'release/MATCH-INCREMENTAL-HTML5.zip' -Force }; Add-Type -AssemblyName System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory((Resolve-Path 'dist-itch').Path, (Join-Path (Resolve-Path 'release').Path 'MATCH-INCREMENTAL-HTML5.zip'))\"",
+    "preview": "vite preview",
+    "desktop:dev": "npm run build && electron .",
+    "package:win": "npm run build && electron-builder --win zip"
+  },
+  "dependencies": {
+    "lucide-react": "^0.468.0",
+    "react": "latest",
+    "react-dom": "latest",
+    "vite": "latest"
+  },
+  "devDependencies": {
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0"
+  },
+  "build": {
+    "appId": "jp.matchincremental.game",
+    "productName": "MATCH INCREMENTAL",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**",
+      "electron/**",
+      "package.json"
+    ],
+    "extraFiles": [
+      {
+        "from": "distribution/README.txt",
+        "to": "README.txt"
+      },
+      {
+        "from": "distribution/TERMS.txt",
+        "to": "TERMS.txt"
+      },
+      {
+        "from": "distribution/CREDITS.txt",
+        "to": "CREDITS.txt"
+      },
+      {
+        "from": "distribution/VERSION.txt",
+        "to": "VERSION.txt"
+      }
+    ],
+    "win": {
+      "target": [
+        "zip"
+      ]
+    }
+  }
+}
